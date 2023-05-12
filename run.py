@@ -1,9 +1,11 @@
 import os
+import datetime
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
-import datetime
-import time
+
+
+
 
 from pyfiglet import Figlet
 
@@ -109,47 +111,49 @@ def main_menu():
 
         elif choice == 2:
             print('\n')
-            print('2. Update information in TYMS')
-            print('Please select information you want to update\n')
-
-            while True:
-                print("What do you want to do? ")
-                print('1. Update existing information')
-                print('2. Add new information')
-                print('3. Back to Main Menu\n')
-
-                subchoice_str = input('Enter your selection (1-3):\n')
-                try:
-                    subchoice = int(subchoice_str)
-                except ValueError:
-
-                    print('Invalid action. Please enter a number between 1 and 3\n')
-                    continue
-
-                if subchoice == 1:
-                    print('\n')
-                    print(tyms_info())
-                    print('\n')
-                    find_and_replace_value_in_sheet()
+            print('You selected: Update information in TYMS')
+            print('\n')
+            # print('\n')
+            print(tyms_info())
+            print('\n')
+            find_and_replace_value_in_sheet()
+            print('\n')
+            print('Information updated successfully.\n')
+            print('\n')
+            subchoice_str = input('Do you want to update another information? (y/n)\n')
+            if subchoice_str.lower() == 'y':
                 print('\n')
-                print('Information updated successfully.')
-                print('\n')
-                print('Your current table is:\n')
                 os.system('clear')
                 print('\n')
+                
                 print(tyms_info())
                 print('\n')
-                subchoice_str = input('Do you want to update another information? (y/n)\n')
-                if subchoice_str.lower() == 'y':
-                    find_and_replace_value_in_sheet()
-                    continue
-                elif subchoice_str.lower() == 'n':
-                    os.system('clear')
-                    startup()
-                    break
-                else:
-                    print('Invalid action. Please enter "y" or "n".\n')
-                    continue
+                find_and_replace_value_in_sheet()
+                
+                continue
+            elif subchoice_str.lower() == 'n':
+                os.system('clear')
+                startup()
+                break
+            else:
+                print('Invalid action. Please enter "y" or "n".\n')
+                continue
+            # while True:
+            #     # print("What do you want to do? ")
+            #     # print('1. Update existing information')
+            #     # print('2. Add new information')
+            #     print('3. Back to Main Menu\n')
+
+            #     subchoice_str = input('Enter your selection (1-3):\n')
+            #     try:
+            #         subchoice = int(subchoice_str)
+            #     except ValueError:
+
+            #         print('Invalid action. Please enter a number between 1 and 3\n')
+            #         continue
+
+                # if subchoice == 1:
+                
 
                 # else:
                 #     print("Invalid action. Please choose add, update, or quit.")
@@ -171,7 +175,6 @@ def main_menu():
         else:
             print('Please enter a number between 1 and 5')
             continue
-
 def headers():
     """
     Return the headers for the table
@@ -211,21 +214,6 @@ def startup():
     print(f.renderText('TYMS'))
     print(datetime.datetime.now().strftime("%d-%m-%Y %H:%M\n"))
 
-# def update_table(old_num, new_num):
-
-
-#     old_num = input("Enter the old movement number: ").upper()
-#     new_num = input("Enter the new movement number: ").upper()
-#     update_table(old_num, new_num)
-
-# def validate_movement_number(number_str):
-#     """Checks if the given string is a valid movement number."""
-#     if len(number_str) != 8:
-#         return False
-#     if not number_str.isalpha():
-#         return False
-#     return True
-
 def find_and_replace_value_in_sheet():
     """
     Find and replace a value in the spreadsheet.
@@ -234,29 +222,36 @@ def find_and_replace_value_in_sheet():
     search_value = input('Enter the data you are looking for:\n ').upper()
 
     if search_value == 'EXIT':
+        os.system('clear')
+        print('\n')
         print('Thank you for using TYMS')
         print('Back to menu...\n')
         return
     print('\n')
     print(f'Your entered data: {search_value}\n')
 
-    print('Searching for data...\n')
+    print('Searching for data...')
     info_worksheet = SHEET.worksheet('info')
     cells = info_worksheet.findall(search_value)
 
     if cells:
-        print('Result found:\n')
-        replacement_value = input('Enter the replacement value:\n ').upper()
+        print(f'{len(cells)} cells found:')
+        print('\n')
+        replacement_value = input('Please enter the replacement value:\n').upper()
+        print('\n')
         for cell in cells:
             cell.value = replacement_value
             info_worksheet.update_cell(cell.row, cell.col, replacement_value)
-            print(f'Replaced with: {replacement_value}\n')
+            print('Replaced with:')
+            print(f'{replacement_value}')
     else:
         print(f'No data found containing "{search_value}".')
         print('Please try again.\n')
         find_and_replace_value_in_sheet()
-
-
+print('\n')
+print('\n')
+print('\n')
+os.system('clear')
 
 main_menu()
 
