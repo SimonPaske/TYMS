@@ -157,10 +157,8 @@ def tabulate_info(tabular_data):
     """
     if not tabular_data:
         return ""
-
     table = tabulate(headers=headers(), tabular_data=tabular_data, tablefmt='presto')
     return table
-
 
 def last_3_arrivals():
     """
@@ -168,23 +166,19 @@ def last_3_arrivals():
     """
     return tabulate_info(info[-3:])
 
-
 def earliest_3_arrivals():
     """
     Display earliest 3 arrivals in the table
     """
     return tabulate_info(info[1:4])
 
-
 def tyms_info():
     """
     Display all information in TYMS in the table
     """
-
     global info
     info = SHEET.worksheet('info').get_all_values()
     return tabulate_info(info[1:])
-
 
 def startup():
     """
@@ -208,23 +202,22 @@ def find_and_replace_value_in_sheet():
     Find and replace a value in the spreadsheet.
     """
     info_worksheet = SHEET.worksheet('info')
-    
-    def search_cells(info_worksheet, search_value):
+
+    def search_cells(search_value):
         """
         Search for cells with a given value in the worksheet and return the list of cells.
         """
         cells = info_worksheet.findall(search_value)
         print('Searching for data...')
         print('\n')
-        
-        search_cells(info_worksheet, search_value)
+
         if not cells:
             print("No data found!")
         else:
             rows = info_worksheet.get_all_values()
             if len(cells) == 1:
                 cell = cells[0]
-                cell_row_info = get_duplicate_rows(rows, cell)
+                cell_row_info = get_duplicate_rows(rows, cell, search_value)
                 print_table(cell_row_info)
                 replace_value_in_cell(cell)
             else:
@@ -250,7 +243,7 @@ def find_and_replace_value_in_sheet():
         cell.value = replacement_value
         info_worksheet.update_cell(cell.row, cell.col, replacement_value)
         print('\n')
-        print(f'Replaced cell {replacement_value} with:')
+        print(f'Replaced cell {cell.value} with:')
         print(f'{replacement_value}')
 
     def select_duplicate(duplicates):
@@ -262,7 +255,7 @@ def find_and_replace_value_in_sheet():
         selected_duplicate = duplicates[selected_duplicate_index-1]
         return selected_duplicate
 
-    def get_duplicate_rows(rows, cell):
+    def get_duplicate_rows(rows, cell, search_value):
         """
         Return the rows in the worksheet that have the same value as the given cell.
         """
@@ -271,6 +264,19 @@ def find_and_replace_value_in_sheet():
         for cell in cells:
             cell_row_info.append(rows[cell.row - 1])
         return cell_row_info
+
+    def validate_search_value(search_value):
+        """
+        Validate the search value entered by the user.
+        """
+        if not isinstance(search_value, str) or len(search_value) > 8:
+            os.system('clear')
+            print('\n')
+            print('Please enter a valid search value (up to 8 characters):')
+            print(f'Your entered data: {search_value}')
+            print('Please try again.\n')
+            print(tyms_info())
+            find_and_replace_value_in_sheet()
 
     print('\n')
     print('If you want to exit, type "quit".\n')
@@ -283,20 +289,9 @@ def find_and_replace_value_in_sheet():
         print('Back to menu...\n')
         os.system('clear')
         return main_menu()
-        # Validate the search value
-    # try:
-    #     search_value = str(search_value).upper()
-    # except ValueError:
-    else:
-        os.system('clear')
-        print('\n')
-        print('Please enter a valid search value (up to 8 characters):')
-        print(f'Your entered data: {search_value}')
-        print('Please try again.\n')
-        print(tyms_info())
-        find_and_replace_value_in_sheet()
-        
 
+    validate_search_value(search_value)
+    search_cells(search_value)
 
 
 
