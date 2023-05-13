@@ -1,9 +1,9 @@
+
 import os
 import datetime
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
-
 
 from pyfiglet import Figlet
 
@@ -19,6 +19,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPE_CREDS)
 SHEET = GSPREAD_CLIENT.open('tyms')
 
 info = SHEET.worksheet('info').get_all_values()
+headers = ['Movement nr', 'Truck', 'Trailer', 'Arrival time', 'Seal']
 
 
 def main_menu():
@@ -27,6 +28,7 @@ def main_menu():
     """
     os.system('clear')
     startup()
+
     while True:
         print('Welcome to TYMS\n')
         print('Please select an option:')
@@ -106,33 +108,21 @@ def main_menu():
 
         elif choice == 2:
             print('\n')
-            print('You selected: Update information in TYMS')
-            print('\n')
-            print(tyms_info())
-            print('\n')
+            print('You selected: Update information in TYMS\n')
             find_and_replace_value_in_sheet()
-            print('\n')
-            subchoice_str = input('Do you want to update another information? (y/n)\n')
+            yes_or_no_question(find_and_replace_value_in_sheet)
 
-            while subchoice_str.lower() == 'y':
-                print('\n')
-                os.system('clear')
-                print('\n')
-                print(tyms_info())
-                print('\n')
-                find_and_replace_value_in_sheet()
-                print('\n')
-                subchoice_str = input('Do you want to update another information? (y/n)\n')
-            startup()
-            main_menu()
 
         elif choice == 3:
-            print('You selected: 3. Add new information to TYMS')
-            print('Please select an option')
+            print('You selected: Add new information to TYMS\n')
+            add_new_data()
+            yes_or_no_question(add_new_data)
 
         elif choice == 4:
-            print('You selected: 4. Delete information from TYMS')
-            print('Please select an option')
+            print('You selected: Delete information from TYMS\n')
+            print('\n')
+            delete_selected_row()
+            yes_or_no_question(delete_selected_row)
 
         elif choice == 5:
             print('Thank you for using TYMS')
@@ -142,23 +132,6 @@ def main_menu():
         else:
             print('Please enter a number between 1 and 5')
             continue
-
-
-def headers():
-    """
-    Return the headers for the table
-    """
-    return ['Movement nr', 'Truck', 'Trailer', 'Arrival time', 'Seal']
-
-
-def tabulate_info(tabular_data):
-    """
-    Display information in a table
-    """
-    if not tabular_data:
-        return ""
-    table = tabulate(headers=headers(), tabular_data=tabular_data, tablefmt='presto')
-    return table
 
 def last_3_arrivals():
     """
@@ -188,6 +161,15 @@ def startup():
     print(f.renderText('TYMS'))
     print(datetime.datetime.now().strftime("%d-%m-%Y %H:%M\n"))
 
+def tabulate_info(tabular_data):
+    """
+    Display information in a table
+    """
+    if not tabular_data:
+        return ""
+    table = tabulate(headers = headers, tabular_data = tabular_data, tablefmt ='presto')
+    return table
+
 def print_table(rows):
     """
     Print the rows in a formatted table.
@@ -202,7 +184,7 @@ def find_and_replace_value_in_sheet():
     Find and replace a value in the spreadsheet.
     """
     info_worksheet = SHEET.worksheet('info')
-
+    print(tyms_info())
     def search_cells(search_value):
         """
         Search for cells with a given value in the worksheet and return the list of cells.
@@ -243,8 +225,8 @@ def find_and_replace_value_in_sheet():
         cell.value = replacement_value
         info_worksheet.update_cell(cell.row, cell.col, replacement_value)
         print('\n')
-        print(f'Replaced cell {cell.value} with:')
-        print(f'{replacement_value}')
+        print(f'Replaced cell {search_value} with:')
+        print(f'{replacement_value}\n')
 
     def select_duplicate(duplicates):
         """
@@ -280,7 +262,7 @@ def find_and_replace_value_in_sheet():
 
     print('\n')
     print('If you want to exit, type "quit".\n')
-    search_value = input('Enter the data you are looking for:\n ').upper()
+    search_value = input('Enter the data you are looking for:\n').upper()
     print('\n')
     if search_value == 'QUIT':
         os.system('clear')
@@ -292,6 +274,27 @@ def find_and_replace_value_in_sheet():
 
     validate_search_value(search_value)
     search_cells(search_value)
+
+def yes_or_no_question(continue_func):
+    """
+    Prompt the user to answer a yes or no question.
+    If the user answers "y", continue with the given function.
+    If the user answers "n", return to the main menu.
+    """
+    while True:
+        subchoice_str = input('Do you want to continue? (y/n)\n').lower()
+        print('\n')
+        if subchoice_str == 'y':
+            os.system('clear')
+            continue_func()
+        elif subchoice_str == 'n':
+            os.system('clear')
+            print('\n')
+            print('Thank you for using TYMS')
+            print('Back to menu...\n')
+            return startup(), main_menu()
+        else:
+            print('Invalid input. Please enter "y" or "n".')
 
 
 
