@@ -65,7 +65,6 @@ def main_menu():
                     subchoice = int(subchoice_str)
                 except ValueError:
                     os.system('clear')
-
                     print('\n')
                     print('Please enter a number between 1 and 2\n')
                     print('\n')
@@ -342,5 +341,33 @@ def add_new_data():
         print('\n')
         print_table(info_worksheet.get_all_values()[1:])
         new_row = []
+
+def delete_selected_row():
+    """
+    Delete the selected row from the worksheet.
+    """
+    rows = SHEET.worksheet('info').get_all_values()
+    print_table(rows)
+    print('\n')
+    print('Type "quit" to return to main menu. \n')
+    # Validate user input for row selection
+    while True:
+        selected_row_num = input('Please select row you want to delete:\n')
+        if selected_row_num == "quit":
+            return main_menu()
+        elif not selected_row_num.isdigit() or int(selected_row_num) > len(rows):
+            print('\n')
+            print('Invalid input! Please enter a valid row number that corresponds to the table above.\n')
+        else:
+            selected_row_num = int(selected_row_num)
+            break
+
+    SHEET.worksheet('info').delete_rows(selected_row_num)
+
+    print(f'\nRow {selected_row_num} has been deleted.\n')
+    # Update the table to reflect the changes
+    rows = SHEET.worksheet('info').get_all_values()
+    print_table(rows)
+
 
 main_menu()
