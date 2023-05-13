@@ -5,8 +5,6 @@ from google.oauth2.service_account import Credentials
 from tabulate import tabulate
 
 
-
-
 from pyfiglet import Figlet
 
 SCOPE = [
@@ -21,6 +19,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPE_CREDS)
 SHEET = GSPREAD_CLIENT.open('tyms')
 
 info = SHEET.worksheet('info').get_all_values()
+
 
 def main_menu():
     """
@@ -37,7 +36,6 @@ def main_menu():
         print('4. Delete information from TYMS')
         print('5. Exit TYMS')
         print('\n')
-
 
         choice = input('Enter your selection: \n')
         try:
@@ -64,7 +62,9 @@ def main_menu():
                 try:
                     subchoice = int(subchoice_str)
                 except ValueError:
+                    os.system('clear')
 
+                    print('\n')
                     print('Please enter a number between 1 and 2\n')
                     print('\n')
                     continue
@@ -112,25 +112,19 @@ def main_menu():
             print('\n')
             find_and_replace_value_in_sheet()
             print('\n')
-            # print('Information updated successfully.\n')
-            # print('\n')
             subchoice_str = input('Do you want to update another information? (y/n)\n')
-            if subchoice_str.lower() == 'y':
+
+            while subchoice_str.lower() == 'y':
                 print('\n')
                 os.system('clear')
                 print('\n')
                 print(tyms_info())
                 print('\n')
                 find_and_replace_value_in_sheet()
-                continue
-            elif subchoice_str.lower() == 'n':
-                os.system('clear')
-                startup()
-                main_menu()
-                break
-            else:
-                print('Invalid action. Please enter "y" or "n".\n')
-                continue
+                print('\n')
+                subchoice_str = input('Do you want to update another information? (y/n)\n')
+            startup()
+            main_menu()
 
         elif choice == 3:
             print('You selected: 3. Add new information to TYMS')
@@ -149,11 +143,14 @@ def main_menu():
             print('Please enter a number between 1 and 5')
             continue
 
+
 def headers():
     """
     Return the headers for the table
     """
     return ['Movement nr', 'Truck', 'Trailer', 'Arrival time', 'Seal']
+
+
 def tabulate_info(tabular_data):
     """
     Display information in a table
@@ -161,8 +158,9 @@ def tabulate_info(tabular_data):
     if not tabular_data:
         return ""
 
-    table = tabulate(headers = headers(), tabular_data = tabular_data, tablefmt='presto')
+    table = tabulate(headers=headers(), tabular_data=tabular_data, tablefmt='presto')
     return table
+
 
 def last_3_arrivals():
     """
@@ -170,20 +168,23 @@ def last_3_arrivals():
     """
     return tabulate_info(info[-3:])
 
+
 def earliest_3_arrivals():
     """
     Display earliest 3 arrivals in the table
     """
     return tabulate_info(info[1:4])
 
+
 def tyms_info():
     """
     Display all information in TYMS in the table
     """
-    
+
     global info
     info = SHEET.worksheet('info').get_all_values()
     return tabulate_info(info[1:])
+
 
 def startup():
     """
@@ -193,11 +194,84 @@ def startup():
     print(f.renderText('TYMS'))
     print(datetime.datetime.now().strftime("%d-%m-%Y %H:%M\n"))
 
+def print_table(rows):
+    """
+    Print the rows in a formatted table.
+    """
+    table_data = [[f'{i+1}.'] + row for i, row in enumerate(rows)]
+    table = tabulate_info(table_data)
+    print(table)
+    print('\n')
+
 def find_and_replace_value_in_sheet():
     """
     Find and replace a value in the spreadsheet.
     """
-    print('\n')
+    info_worksheet = SHEET.worksheet('info')
+    
+    def search_cells(info_worksheet, search_value):
+        """
+        Search for cells with a given value in the worksheet and return the list of cells.
+        """
+        cells = info_worksheet.findall(search_value)
+        print('Searching for data...')
+        print('\n')
+        
+        search_cells(info_worksheet, search_value)
+        if not cells:
+            print("No data found!")
+        else:
+            rows = info_worksheet.get_all_values()
+            if len(cells) == 1:
+                cell = cells[0]
+                cell_row_info = get_duplicate_rows(rows, cell)
+                print_table(cell_row_info)
+                replace_value_in_cell(cell)
+            else:
+                print('Multiple cells found:\n')
+                duplicates = []
+                for cell in cells:
+                    duplicate_row = rows[cell.row - 1]
+                    if duplicate_row not in duplicates:
+                        duplicates.append(duplicate_row)
+                print_table(duplicates)
+                selected_duplicate = select_duplicate(duplicates)
+                for cell in cells:
+                    row = rows[cell.row - 1]
+                    if row == selected_duplicate:
+                        replace_value_in_cell(cell)
+                        return
+
+    def replace_value_in_cell(cell):
+        """
+        Prompt the user for a replacement value for the given cell and update the cell in the worksheet.
+        """
+        replacement_value = input(f'Please enter the replacement value for cell {cell.value}:\n').upper()
+        cell.value = replacement_value
+        info_worksheet.update_cell(cell.row, cell.col, replacement_value)
+        print('\n')
+        print(f'Replaced cell {replacement_value} with:')
+        print(f'{replacement_value}')
+
+    def select_duplicate(duplicates):
+        """
+        Prompt the user to select a duplicate row from a list of duplicate rows and return the selected row.
+        """
+        selected_duplicate_index = int(input(f'Please select a duplicate row to replace (1-{len(duplicates)}):\n'))
+        print('\n')
+        selected_duplicate = duplicates[selected_duplicate_index-1]
+        return selected_duplicate
+
+    def get_duplicate_rows(rows, cell):
+        """
+        Return the rows in the worksheet that have the same value as the given cell.
+        """
+        cells = info_worksheet.findall(search_value)
+        cell_row_info = []
+        for cell in cells:
+            cell_row_info.append(rows[cell.row - 1])
+        return cell_row_info
+
     print('\n')
     print('If you want to exit, type "quit".\n')
     search_value = input('Enter the data you are looking for:\n ').upper()
@@ -209,69 +283,21 @@ def find_and_replace_value_in_sheet():
         print('Back to menu...\n')
         os.system('clear')
         return main_menu()
-
-    # Validate the search value
-    while not isinstance(search_value, str) or len(search_value) > 8:
-        search_value = input.str(('Please enter a valid search value (up to 8 characters):\n')).upper()
-        print ('\n')
-    print('\n')
-    print(f'Your entered data: {search_value}\n')
-
-    print('Searching for data...')
-    print ('\n')
-    info_worksheet = SHEET.worksheet('info')
-    cells = info_worksheet.findall(search_value)
-
-    if cells:
-        print(f'{len(cells)} cells found:')
-        print('\n')
-        if len(cells) == 1:
-            cell = cells[0]
-            replacement_value = input(f'Please enter the replacement value for cell {cell.value}:\n').upper()
-
-            cell.value = replacement_value
-            info_worksheet.update_cell(cell.row, cell.col, replacement_value)
-            print(f'Replaced cell {cell.row},{cell.col} with:')
-            print(f'{replacement_value}')
-        else:
-            print('Multiple cells found:\n')
-            rows = info_worksheet.get_all_values()
-            duplicates = []
-            for cell in cells:
-                duplicate_row = rows[cell.row - 1]
-                if duplicate_row not in duplicates:
-                    duplicates.append(duplicate_row)
-            table_data = [[f'{i+1}.'] + row for i, row in enumerate(duplicates)]
-            table = tabulate_info(table_data)
-            print(table)
-            print('\n')
-            selected_duplicate_index = int(input(f'Please select a duplicate row to replace (1-{len(duplicates)}):\n'))
-            print('\n')
-            selected_duplicate = duplicates[selected_duplicate_index-1]
-            for cell in cells:
-                row = rows[cell.row - 1]
-                if row == selected_duplicate:
-                    chr(cell.col + 64)
-                    replacement_value = input(f'Please enter the replacement value for cell "{cell.value}":\n').upper()
-                    print('\n')
-                    cell.value = replacement_value
-                    info_worksheet.update_cell(cell.row, cell.col, replacement_value)
-                    print('Replaced cell with:')
-                    print(f'{replacement_value}')
-                    return
+        # Validate the search value
+    # try:
+    #     search_value = str(search_value).upper()
+    # except ValueError:
     else:
         os.system('clear')
-
         print('\n')
-        print('\n')
-        print(tyms_info())
-        print('\n')
-        print(f'No data found containing "{search_value}".')
+        print('Please enter a valid search value (up to 8 characters):')
+        print(f'Your entered data: {search_value}')
         print('Please try again.\n')
+        print(tyms_info())
         find_and_replace_value_in_sheet()
+        
 
 
 
 
 main_menu()
-
