@@ -1,4 +1,4 @@
-
+import re
 import os
 import datetime
 import gspread
@@ -296,6 +296,51 @@ def yes_or_no_question(continue_func):
         else:
             print('Invalid input. Please enter "y" or "n".')
 
+def add_new_data():
+    """
+    Add new data to the table by prompting the user to enter data for each column, and suggesting headers.
+    """
+    print(tyms_info())
+    print('\n')
+    print('Type "quit" to return to main menu.\n')
+    print('Please add new information for:\n')
 
+    global headers
+    headers = ['Movement nr', 'Truck', 'Trailer', 'Arrival time', 'Seal']
+    new_row = []
+
+    while True:
+        for i, header in enumerate(headers):
+            value = input(f'{header}: ')
+
+            if value.lower() == 'quit':
+                print('\n')
+                print('Returning to main menu...')
+                print("Type 'y' if you want restart adding data.")
+                print("Type 'n' if you want to exit.")
+                print('\n')
+                return
+
+            if i == 3:
+                while not re.match(r'^([01]\d|2[0-3]):([0-5]\d)$', value):
+                    print('\n')
+                    print(f'Invalid {header} format, please use HH:MM \n')
+                    value = input(f'{header} (HH:MM): ')
+
+            elif i == 4:
+                while not re.match(r'^\d{1,10}$', value):
+                    print('\n')
+                    print(f'Invalid {header} format, please use digits\n')
+                    value = input(f'{header}: \n')
+
+            new_row.append(value.upper())
+
+        info_worksheet = SHEET.worksheet('info')
+        info_worksheet.append_row(new_row)
+        print('\n')
+        print('Row added successfully!\n')
+        print('\n')
+        print_table(info_worksheet.get_all_values()[1:])
+        new_row = []
 
 main_menu()
