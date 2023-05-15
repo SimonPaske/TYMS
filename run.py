@@ -4,7 +4,6 @@ import datetime
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
-
 from pyfiglet import Figlet
 
 SCOPE = [
