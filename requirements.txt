@@ -15,7 +15,6 @@ pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pyfiglet==0.8.post1
 Pygments==2.11.2
-PyGObject==3.42.1
 pyparsing==2.4.7
 PyYAML==5.4.1
 requests==2.30.0
