@@ -160,7 +160,7 @@ def startup():
     Display startup screen
     """
     # Startup screen with Figlet and datetime
-    f = Figlet(font='Colossal')
+    f = Figlet(font='o8')
     print(f.renderText('TYMS'))
     print(datetime.datetime.now().strftime("%d-%m-%Y %H:%M\n"))
 
@@ -233,7 +233,7 @@ def find_and_replace_value_in_sheet():
         """
         while True:
             replacement_value = input(
-                f'Please enter the replacement for cell {cell.value}:\n').upper()
+                f'Please enter the replacement for {cell.value}:\n').upper()
             if replacement_value.lower() == "quit":
                 return main_menu()
             else:
@@ -243,8 +243,6 @@ def find_and_replace_value_in_sheet():
                 print(f'Replaced cell {search_value} with:')
                 print(f'{replacement_value}\n')
                 break
-
-
 
     def select_duplicate(duplicates):
         """
