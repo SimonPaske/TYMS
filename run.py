@@ -1,3 +1,5 @@
+
+
 import re
 import os
 import datetime
@@ -18,7 +20,7 @@ SCOPE_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPE_CREDS)
 SHEET = GSPREAD_CLIENT.open('tyms')
 
-info = SHEET.worksheet('info').get_all_values()
+INFO_VALUES = SHEET.worksheet('info').get_all_values()
 headers = ['Movement nr', 'Truck', 'Trailer', 'Arrival time', 'Seal']
 
 
@@ -60,7 +62,6 @@ def main_menu():
                 print('4. Back to Main Menu\n')
 
                 subchoice_str = input('Enter your selection (1-4):\n')
-
                 try:
                     subchoice = int(subchoice_str)
                 except ValueError:
@@ -99,8 +100,9 @@ def main_menu():
                     print('\n')
                     print('4. Back to Main Menu\n')
                     os.system('clear')
-                    main_menu()
+                    startup()
                     break
+
                 else:
                     print('Please enter a number between 1 and 3\n')
                     print('\n')
@@ -110,7 +112,6 @@ def main_menu():
             print('You selected: Update information in TYMS\n')
             find_and_replace_value_in_sheet()
             yes_or_no_question(find_and_replace_value_in_sheet)
-
 
         elif choice == 3:
             print('You selected: Add new information to TYMS\n')
@@ -126,39 +127,45 @@ def main_menu():
         elif choice == 5:
             print('Thank you for using TYMS')
             os.system('clear')
-            break
+            os.sys.exit("done")
 
         else:
             print('Please enter a number between 1 and 5')
             continue
 
+
 def last_3_arrivals():
     """
     Display latest 3 arrivals in the table
     """
-    return tabulate_info(info[-3:])
+    return tabulate_info(INFO_VALUES[-3:])
+
 
 def earliest_3_arrivals():
     """
     Display earliest 3 arrivals in the table
     """
-    return tabulate_info(info[1:4])
+    return tabulate_info(INFO_VALUES[1:4])
+
 
 def tyms_info():
     """
     Display all information in TYMS in the table
     """
-    global info
-    info = SHEET.worksheet('info').get_all_values()
-    return tabulate_info(info[1:])
+    global INFO_VALUES
+    INFO_VALUES = SHEET.worksheet('info').get_all_values()
+    return tabulate_info(INFO_VALUES[1:])
+
 
 def startup():
     """
     Display startup screen
     """
+    # Startup screen with Figlet and datetime
     f = Figlet(font='Colossal')
     print(f.renderText('TYMS'))
     print(datetime.datetime.now().strftime("%d-%m-%Y %H:%M\n"))
+
 
 def tabulate_info(tabular_data):
     """
@@ -166,8 +173,10 @@ def tabulate_info(tabular_data):
     """
     if not tabular_data:
         return ""
-    table = tabulate(headers = headers, tabular_data = tabular_data, tablefmt ='presto')
+    table = tabulate(
+        headers=headers, tabular_data=tabular_data, tablefmt='presto')
     return table
+
 
 def print_table(rows):
     """
@@ -178,15 +187,18 @@ def print_table(rows):
     print(table)
     print('\n')
 
+
 def find_and_replace_value_in_sheet():
     """
     Find and replace a value in the spreadsheet.
     """
     info_worksheet = SHEET.worksheet('info')
     print(tyms_info())
+
     def search_cells(search_value):
         """
-        Search for cells with a given value in the worksheet and return the list of cells.
+        Search for cells with a given value
+        in the worksheet and return the list of cells.
         """
         cells = info_worksheet.findall(search_value)
         print('Searching for data...')
@@ -218,9 +230,11 @@ def find_and_replace_value_in_sheet():
 
     def replace_value_in_cell(cell):
         """
-        Prompt the user for a replacement value for the given cell and update the cell in the worksheet.
+        Prompt the user for a replacement value for
+        the given cell and update the cell in the worksheet.
         """
-        replacement_value = input(f'Please enter the replacement value for cell {cell.value}:\n').upper()
+        replacement_value = input(
+            f'Please enter the replacement value for cell {cell.value}:\n').upper()
         cell.value = replacement_value
         info_worksheet.update_cell(cell.row, cell.col, replacement_value)
         print('\n')
@@ -229,16 +243,19 @@ def find_and_replace_value_in_sheet():
 
     def select_duplicate(duplicates):
         """
-        Prompt the user to select a duplicate row from a list of duplicate rows and return the selected row.
+        Prompt the user to select a duplicate row from
+        a list of duplicate rows and return the selected row.
         """
-        selected_duplicate_index = int(input(f'Please select a duplicate row to replace (1-{len(duplicates)}):\n'))
+        selected_duplicate_index = int(
+            input(f'Please select a duplicate row to replace (1-{len(duplicates)}):\n'))
         print('\n')
         selected_duplicate = duplicates[selected_duplicate_index-1]
         return selected_duplicate
 
     def get_duplicate_rows(rows, cell, search_value):
         """
-        Return the rows in the worksheet that have the same value as the given cell.
+        Return the rows in the worksheet
+        that have the same value as the given cell.
         """
         cells = info_worksheet.findall(search_value)
         cell_row_info = []
@@ -254,9 +271,8 @@ def find_and_replace_value_in_sheet():
             os.system('clear')
             print('\n')
             print('Please enter a valid search value (up to 8 characters):')
-            print(f'Your entered data: {search_value}')
+            print(f'Your entered data: {search_value}\n')
             print('Please try again.\n')
-            print(tyms_info())
             find_and_replace_value_in_sheet()
 
     print('\n')
@@ -273,6 +289,7 @@ def find_and_replace_value_in_sheet():
 
     validate_search_value(search_value)
     search_cells(search_value)
+
 
 def yes_or_no_question(continue_func):
     """
@@ -295,9 +312,11 @@ def yes_or_no_question(continue_func):
         else:
             print('Invalid input. Please enter "y" or "n".')
 
+
 def add_new_data():
     """
-    Add new data to the table by prompting the user to enter data for each column, and suggesting headers.
+    Add new data to the table by prompting the user to enter
+    data for each column, and suggesting headers.
     """
     print(tyms_info())
     print('\n')
@@ -342,6 +361,7 @@ def add_new_data():
         print_table(info_worksheet.get_all_values()[1:])
         new_row = []
 
+
 def delete_selected_row():
     """
     Delete the selected row from the worksheet.
@@ -357,7 +377,7 @@ def delete_selected_row():
             return main_menu()
         elif not selected_row_num.isdigit() or int(selected_row_num) > len(rows):
             print('\n')
-            print('Invalid input! Please enter a valid row number that corresponds to the table above.\n')
+            print('Invalid input! Please enter a valid row number.\n')
         else:
             selected_row_num = int(selected_row_num)
             break
