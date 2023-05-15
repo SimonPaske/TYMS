@@ -231,16 +231,16 @@ def find_and_replace_value_in_sheet():
         the given cell and update the cell in the worksheet.
         """
         while True:
-            replacement_value = input(
+            replace_value = input(
                 f'Please enter the replacement for {cell.value}:\n').upper()
-            if replacement_value.lower() == "quit":
+            if replace_value.lower() == "quit":
                 return main_menu()
             else:
-                cell.value = replacement_value
-                info_worksheet.update_cell(cell.row, cell.col, replacement_value)
+                cell.value = replace_value
+                info_worksheet.update_cell(cell.row, cell.col, replace_value)
                 print('\n')
                 print(f'Replaced cell {search_value} with:')
-                print(f'{replacement_value}\n')
+                print(f'{replace_value}\n')
                 break
 
     def select_duplicate(duplicates):
@@ -248,10 +248,22 @@ def find_and_replace_value_in_sheet():
         Prompt the user to select a duplicate row from
         a list of duplicate rows and return the selected row.
         """
-        selected_duplicate_index = int(
-            input(f'Please select a row to replace (1-{len(duplicates)}):\n'))
-        print('\n')
-        selected_duplicate = duplicates[selected_duplicate_index-1]
+        selected_duplicate = None
+        while selected_duplicate is None:
+            selected_duplicate_index = input(f'Please select a row to replace \
+                (1-{len(duplicates)})\n')
+            print('\n')
+            if selected_duplicate_index.lower() == 'quit':
+                print('Thank you for using TYMS')
+                print('Back to menu...\n')
+                return main_menu()
+
+            try:
+                selected_duplicate_index = int(selected_duplicate_index)
+                selected_duplicate = duplicates[selected_duplicate_index-1]
+            except (ValueError, IndexError):
+                print('Invalid input. Please select a valid \
+                    row index or type "quit".\n')
         return selected_duplicate
 
     def get_duplicate_rows(rows, cell, search_value):
@@ -380,7 +392,8 @@ def delete_selected_row():
         selected_row_num = input('Please select row you want to delete:\n')
         if selected_row_num == "quit":
             return main_menu()
-        elif not selected_row_num.isdigit() or int(selected_row_num) > len(rows):
+        elif not selected_row_num.isdigit() \
+                or int(selected_row_num) > len(rows):
             print('\n')
             print('Invalid input! Please enter a valid row number.\n')
         else:
@@ -395,7 +408,7 @@ def delete_selected_row():
     if confirm.lower() == "cancel":
         return main_menu()
     elif confirm != "":
-        print("Invalid input. Please press enter to delete the row.")
+        print("Invalid input. Please press enter to delete the row.\n")
         return delete_selected_row()
 
     SHEET.worksheet('info').delete_rows(selected_row_num)
