@@ -386,7 +386,8 @@ def delete_selected_row():
 
     # Confirm deletion
     print('Press ENTER to delete or type "cancel" to return to the main menu.')
-    confirm = input(f'\nAre you sure you want to delete row {selected_row_num}?\n')
+    confirm = input(
+        f'\nAre you sure you want to delete row {selected_row_num}?\n')
     if confirm.lower() == "cancel":
         return main_menu()
     elif confirm != "":
@@ -399,7 +400,6 @@ def delete_selected_row():
     # Update the table to reflect the changes
     rows = SHEET.worksheet('info').get_all_values()
     print_table(rows)
-
 
 
 main_menu()
