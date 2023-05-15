@@ -231,13 +231,20 @@ def find_and_replace_value_in_sheet():
         Prompt the user for a replacement value for
         the given cell and update the cell in the worksheet.
         """
-        replacement_value = input(
-            f'Please enter the replacement value for cell {cell.value}:\n').upper()
-        cell.value = replacement_value
-        info_worksheet.update_cell(cell.row, cell.col, replacement_value)
-        print('\n')
-        print(f'Replaced cell {search_value} with:')
-        print(f'{replacement_value}\n')
+        while True:
+            replacement_value = input(
+                f'Please enter the replacement for cell {cell.value}:\n').upper()
+            if replacement_value.lower() == "quit":
+                return main_menu()
+            else:
+                cell.value = replacement_value
+                info_worksheet.update_cell(cell.row, cell.col, replacement_value)
+                print('\n')
+                print(f'Replaced cell {search_value} with:')
+                print(f'{replacement_value}\n')
+                break
+
+
 
     def select_duplicate(duplicates):
         """
@@ -245,7 +252,7 @@ def find_and_replace_value_in_sheet():
         a list of duplicate rows and return the selected row.
         """
         selected_duplicate_index = int(
-            input(f'Please select a duplicate row to replace (1-{len(duplicates)}):\n'))
+            input(f'Please select a row to replace (1-{len(duplicates)}):\n'))
         print('\n')
         selected_duplicate = duplicates[selected_duplicate_index-1]
         return selected_duplicate
