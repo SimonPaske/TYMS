@@ -1,5 +1,3 @@
-
-
 import re
 import os
 import datetime
@@ -337,7 +335,7 @@ def add_new_data():
                 print("Type 'y' if you want restart adding data.")
                 print("Type 'n' if you want to exit.")
                 print('\n')
-                return
+                return main_menu()
 
             if i == 3:
                 while not re.match(r'^([01]\d|2[0-3]):([0-5]\d)$', value):
@@ -358,6 +356,9 @@ def add_new_data():
         print('\n')
         print('Row added successfully!\n')
         print('\n')
+        input('Please press enter to continue.')
+        os.system('clear')
+        add_new_data()
         print_table(info_worksheet.get_all_values()[1:])
         new_row = []
 
@@ -380,7 +381,17 @@ def delete_selected_row():
             print('Invalid input! Please enter a valid row number.\n')
         else:
             selected_row_num = int(selected_row_num)
+            print('\n')
             break
+
+    # Confirm deletion
+    print('Press ENTER to delete or type "cancel" to return to the main menu.')
+    confirm = input(f'\nAre you sure you want to delete row {selected_row_num}?\n')
+    if confirm.lower() == "cancel":
+        return main_menu()
+    elif confirm != "":
+        print("Invalid input. Please press enter to delete the row.")
+        return delete_selected_row()
 
     SHEET.worksheet('info').delete_rows(selected_row_num)
 
@@ -388,6 +399,7 @@ def delete_selected_row():
     # Update the table to reflect the changes
     rows = SHEET.worksheet('info').get_all_values()
     print_table(rows)
+
 
 
 main_menu()
