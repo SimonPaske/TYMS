@@ -379,7 +379,7 @@ def add_new_data():
         print('\n')
         print('Row added successfully!\n')
         print('\n')
-        input('Please press enter to continue.')
+        input('Please press ENTER to continue.')
         os.system('clear')
         add_new_data()
         print_table(info_worksheet.get_all_values()[1:])
@@ -415,7 +415,7 @@ def delete_selected_row():
     if confirm.lower() == "cancel":
         return main_menu()
     elif confirm != "":
-        print("Invalid input. Please press enter to delete the row.\n")
+        print("Invalid input. Please press ENTER to delete the row.\n")
         return delete_selected_row()
 
     SHEET.worksheet('info').delete_rows(selected_row_num)

@@ -50,6 +50,8 @@ The TYMS program is a helpful tool for managing information related to movements
 
 IMPLEMENTATION
 
+---
+
 - Main Menu Options:
 
   - When the program starts, a main menu option will appear with the following options:
@@ -61,6 +63,14 @@ IMPLEMENTATION
   - The user must input a correct number corresponding to each menu or they will be alerted of an incorrect choice and the menu will be presented again.
   - This feature will allow the user to easily access the sub-menus to each category to perform the operations needed.
 
+**Main Menu**
+![main menu](docs/screenshots/main_menu.png)
+
+**Invalid input**
+![invalid main menu](docs/screenshots/main_menu_invalid.png)
+
+---
+
 - Sub-menu options for "View TYMS Information":
   - When a user selects "View TYMS Information" from the main menu, the following options will appear:
     1. View All Information - This option will print all information in the table.
@@ -70,12 +80,46 @@ IMPLEMENTATION
   - The user must input a correct number corresponding to each menu or they will be alerted of an incorrect choice and the menu will be presented again.
   - This feature will allow the user to easily access the sub-menus to each category to perform the operations needed.
 
+**View TYMS Information**
+![information](docs/screenshots/sub_menu_view_tyms_information.png)
+
+**View All Information**
+![all information](docs/screenshots/view_all_tyms_information.png)
+
+**View Latest Three Arrivals**
+![3 latest](docs/screenshots/view_3_latest.png)
+
+**View Earliest Three Arrivals**
+![3 earliest](docs/screenshots/view_3_earliest.png)
+
+**Invalid input**
+![invalid information](docs/screenshots/view_tyms_information_invalid.png)
+
+---
+
 - Options for "Update Information in TYMS":
   - When a user selects Update Information in TYMS from the main menu, the following options will appear and the table will be printed:
     1. Find and Replace a Value - This option will ask the user to enter a value that is in the table and replace it with the new value. Each time value is found it will be printed as a whole row containing that value.
     2. Back to Main Menu - This option will bring the user back to the main menu when "quit is typed.
   - The user must input a correct value corresponding to the table or they will be alerted of an incorrect choice and the table will be presented again.
   - This feature will allow the user to easily perform the operations needed.
+
+**Update Information in TYMS**
+![update info](docs/screenshots/update_info.png)
+
+**Info found**
+![info found](docs/screenshots/update_found.png)
+
+**Duplicate found**
+![duplicate found](docs/screenshots/update_duplicate.png)
+
+**Replaced Info**
+![replaced info](docs/screenshots/update_replaced.png)
+
+**Invalid input**
+![invalid info](docs/screenshots/update_invalid.png)
+
+---
 
 - Options for "Add New Information to TYMS":
   - When the user selects Add New Information to TYMS, the table will be printed and will be prompted to enter new information in the following order.
@@ -88,6 +132,12 @@ IMPLEMENTATION
   - This feature will allow the user to easily perform the operations needed.
   - Users can type "quit" while entering new information to back to the main menu.
 
+**Add New Information to TYMS**
+![add new](docs/screenshots/add_new.png)
+
+**Add New Info**
+![add new info](docs/screenshots/add_new_info.png)
+![add new enter](docs/screenshots/add_new_enter.png)
 - Option for "Delete Information from TYMS":
   - When the user selects Delete Information from TYMS, the table will be printed with the row numbers and the user will be prompted to enter the corresponding row number to delete it.
   - When the user enters the row number they will be asked to confirm their choice by pressing the "Enter" button on a keyboard or typing "cancel" to cancel the operation and back to the main menu.
