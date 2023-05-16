@@ -327,7 +327,6 @@ def yes_or_no_question(continue_func):
             print('Invalid input. Please enter "y" or "n".')
 
 
-
 def add_new_data():
     """
     Add new data to the table by prompting the user to enter
