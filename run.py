@@ -235,6 +235,10 @@ def find_and_replace_value_in_sheet():
                 f'Please enter the replacement for {cell.value}:\n').upper()
             if replace_value.lower() == "quit":
                 return main_menu()
+            if len(replace_value) > 8:
+                os.system('clear')
+                print('\n')
+                print('Please enter a valid replace value (up to 8 characters):')
             else:
                 cell.value = replace_value
                 info_worksheet.update_cell(cell.row, cell.col, replace_value)
@@ -262,7 +266,8 @@ def find_and_replace_value_in_sheet():
                 selected_duplicate_index = int(selected_duplicate_index)
                 selected_duplicate = duplicates[selected_duplicate_index-1]
             except (ValueError, IndexError):
-                print('Invalid input. Please select a valid row or type "quit".\n')
+                print('Invalid input.\n')
+                print('Please select a valid row or type "quit"\n')
         return selected_duplicate
 
     def get_duplicate_rows(rows, cell, search_value):

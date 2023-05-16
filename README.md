@@ -14,6 +14,21 @@
   - [Structure](#structure)
     - [Features](#features)
     - [Logical Flow](#logical-flow)
+    - [Database Design](#database-design)
+  - [Technologies](#technologies)
+- [Testing](#testing)
+  - [Testing Documentation for TYMS Code](#testing-documentation-for-tyms-code)
+  - [Test Cases](#test-cases)
+    - [Case 1: View TYMS Information](#case-1-view-tyms-information)
+    - [Case 2: Update Information in TYMS](#case-2-update-information-in-tyms)
+    - [Case 3: Add New Information to TYMS](#case-3-add-new-information-to-tyms)
+    - [Case 4: Delete Information from TYMS](#case-4-delete-information-from-tyms)
+    - [Case 5: Invalid Input Handling](#case-5-invalid-input-handling)
+    - [Case 6: Quitting the Application](#case-6-quitting-the-application)
+  - [Conclusion](#conclusion)
+    - [Pep8 Validation](#pep8-validation)
+
+---
 
 ## Introduction
 
@@ -43,6 +58,8 @@ The TYMS program is a helpful tool for managing information related to movements
 - Search and Filter Functionality: Allow users to search for specific information based on criteria such as truck number, trailer number, or arrival time. This would make it easier to find specific entries in a large dataset.
 - Sorting: Implement sorting options to organize the information in ascending or descending order based on different columns, such as arrival time or movement number. This would help users analyze the data more effectively.
 - Notifications and Reminders: Integrate notification functionality to send reminders or notifications when a truck is expected to arrive or when an entry is modified.
+
+---
 
 ## Structure
 
@@ -137,12 +154,41 @@ IMPLEMENTATION
 
 **Add New Info**
 ![add new info](docs/screenshots/add_new_info.png)
+
+**Press ENTER**
 ![add new enter](docs/screenshots/add_new_enter.png)
+
+**Invalid Add New**
+![invalid add new](docs/screenshots/invalid_add_new.png)
+
+**Invalid Add Seal**
+![invalid seal](docs/screenshots/invalid_seal_add_new.png)
+
+**Invalid Add Time**
+![invalid time](docs/screenshots/invalid_time_add_new.png)
+
+---
+
 - Option for "Delete Information from TYMS":
   - When the user selects Delete Information from TYMS, the table will be printed with the row numbers and the user will be prompted to enter the corresponding row number to delete it.
   - When the user enters the row number they will be asked to confirm their choice by pressing the "Enter" button on a keyboard or typing "cancel" to cancel the operation and back to the main menu.
   - If a user press the "Enter" the program deletes the selected row and asks the user to continue or leave the operation by typing "y" or "n" respectively.
   - Back to Main Menu - When the user type "quit" instead of row number, the program goes back to the main menu.
+
+**Delete**
+![delete](docs/screenshots/delete.png)
+
+**Delete Invalid**
+![invalid delete](docs/screenshots/invalid_delete.png)
+
+**Delete Enter**
+![delete enter](docs/screenshots/delete_enter.png)
+
+**Delete Continue**
+
+![delete continue](docs/screenshots/delete_continue.png)
+
+---
 
 ### Logical Flow
 
@@ -160,3 +206,108 @@ IMPLEMENTATION
 
 **Delete Information**
 ![delete info](docs/flowchart/delete_info.png)
+
+---
+
+### Database Design
+
+Google Sheets was used for storing data. In the sheet are stored the Movement number (A row), Truck number (B row), Trailer number (C row), Arrival time (D row) and Seal number (E row).
+
+Google Sheets automatically saves changes and maintains version history, providing a level of data security and ensuring that previous versions of the database can be restored if necessary. Additionally, Google's robust infrastructure helps protect against data loss or corruption.
+
+![google sheets](docs/screenshots/google_sheets.png)
+
+---
+
+## Technologies
+
+- Python - Python was the main language used to build the application.
+  - Python packages used:
+    - gspread - used for working with Google Sheets. It provides a convenient API for accessing and manipulating spreadsheet data, such as reading, writing, and formatting cells, creating and deleting sheets, and managing permissions.
+    - datetime - used to create, manipulate, and format date and time.
+    - tabulate - useed to convert data into nicely formatted tables.
+    - pyfiglet - used to create ASCII art from the text.
+    - google.auth - used to provides authentication-related functionality for Google APIs.
+    - os - used to provide functions for interacting with the operating system.
+    - re - used to for data validation.
+
+---
+
+# Testing
+
+---
+
+## Testing Documentation for TYMS Code
+
+## Test Cases
+
+### Case 1: View TYMS Information
+
+1. Description: Verify that the user can view all the information in the TYMS system.
+2. Test Steps:
+   - Launch the TYMS application.
+   - Select the option to view TYMS information.
+   - Verify that all the information is displayed correctly.
+3. Expected Result: The TYMS information is displayed accurately in a tabular format.
+
+### Case 2: Update Information in TYMS
+
+1. Description: Ensure that the user can update information in the TYMS system.
+2. Test Steps:
+   - Launch the TYMS application.
+   - Select the option to update information.
+   - Enter the data to be searched for.
+   - If found, provide a replacement value.
+   - Verify that the value is updated correctly.
+3. Expected Result: The specified information in the TYMS system is successfully updated.
+
+### Case 3: Add New Information to TYMS
+
+1. Description: Test the ability to add new information to the TYMS system.
+2. Test Steps:
+   - Launch the TYMS application.
+   - Select the option to add new information.
+   - Enter the data for each column as prompted.
+   - Verify that the new row is added correctly.
+3. Expected Result: The new information is added to the TYMS system accurately.
+
+### Case 4: Delete Information from TYMS
+
+1. Description: Verify the ability to delete information from the TYMS system.
+2. Test Steps:
+   - Launch the TYMS application.
+   - Select the option to delete information.
+   - Choose the row to be deleted.
+   - Confirm the deletion.
+   - Verify that the row is deleted correctly.
+3. Expected Result: The specified row is successfully deleted from the TYMS system.
+
+### Case 5: Invalid Input Handling
+
+1. Description: Test the handling of invalid user inputs.
+2. Test Steps:
+   - Launch the TYMS application.
+   - Enter invalid inputs such as non-numeric values or exceeding character limits.
+   - Verify that appropriate error messages are displayed.
+3. Expected Result: The TYMS application handles invalid user inputs gracefully by providing clear error messages.
+
+### Case 6: Quitting the Application
+
+1. Description: Ensure that the user can exit the TYMS application.
+2. Test Steps:
+   - Launch the TYMS application.
+   - Choose the option to quit the application.
+   - Verify that the application terminates successfully.
+3. Expected Result: The TYMS application can be exited without any errors.
+
+## Conclusion
+
+The above test cases cover the major functionalities of the TYMS code. Performing these tests will help ensure that the code behaves as expected, handles inputs correctly, and maintains the integrity of the information in the TYMS system.
+
+---
+
+### Pep8 Validation
+
+All python code was run through [PEP8 Python Validator](https://pep8ci.herokuapp.com/)  validator and any warnings or errors were fixed. Code then validated successfully.
+
+![pep8](docs/testing/pep8_validator.png)
