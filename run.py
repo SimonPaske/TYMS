@@ -238,7 +238,7 @@ def find_and_replace_value_in_sheet():
             if len(replace_value) > 8:
                 os.system('clear')
                 print('\n')
-                print('Please enter a valid replace value (up to 8 characters):')
+                print('Please enter replace value (up to 8 characters):')
             else:
                 cell.value = replace_value
                 info_worksheet.update_cell(cell.row, cell.col, replace_value)
