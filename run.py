@@ -327,6 +327,7 @@ def yes_or_no_question(continue_func):
             print('Invalid input. Please enter "y" or "n".')
 
 
+
 def add_new_data():
     """
     Add new data to the table by prompting the user to enter
@@ -334,7 +335,7 @@ def add_new_data():
     """
     print(tyms_info())
     print('\n')
-    print('Type "quit" to return to main menu.\n')
+    print('Type "quit" to return to the main menu.\n')
     print('Please add new information for:\n')
 
     global headers
@@ -343,12 +344,20 @@ def add_new_data():
 
     while True:
         for i, header in enumerate(headers):
-            value = input(f'{header}: ')
+            if i < 3:
+                # Add validator to allow up to 10 strings
+                value = input(f'{header}: ')
+                while len(value) >= 10:
+                    print('\n')
+                    print('Invalid input. Please enter up to 10 letters.\n')
+                    value = input(f'{header}: ')
+            else:
+                value = input(f'{header}: ')
 
             if value.lower() == 'quit':
                 print('\n')
-                print('Returning to main menu...')
-                print("Type 'y' if you want restart adding data.")
+                print('Returning to the main menu...')
+                print("Type 'y' if you want to restart adding data.")
                 print("Type 'n' if you want to exit.")
                 print('\n')
                 return main_menu()
@@ -356,13 +365,13 @@ def add_new_data():
             if i == 3:
                 while not re.match(r'^([01]\d|2[0-3]):([0-5]\d)$', value):
                     print('\n')
-                    print(f'Invalid {header} format, please use HH:MM \n')
+                    print(f'Invalid {header} format. Please use HH:MM.\n')
                     value = input(f'{header} (HH:MM): ')
 
             elif i == 4:
                 while not re.match(r'^\d{1,10}$', value):
                     print('\n')
-                    print(f'Invalid {header} format, please use digits\n')
+                    print(f'Invalid {header} format. Please use digits.\n')
                     value = input(f'{header}: \n')
 
             new_row.append(value.upper())
@@ -389,8 +398,8 @@ def delete_selected_row():
     print('Type "quit" to return to main menu. \n')
     # Validate user input for row selection
     while True:
-        selected_row_num = input('Please select row you want to delete:\n')
-        if selected_row_num == "quit":
+        selected_row_num = input('Please select row to delete:\n').upper()
+        if selected_row_num == "QUIT":
             return main_menu()
         elif not selected_row_num.isdigit() \
                 or int(selected_row_num) > len(rows):
