@@ -27,6 +27,11 @@
     - [Case 6: Quitting the Application](#case-6-quitting-the-application)
   - [Conclusion](#conclusion)
     - [Pep8 Validation](#pep8-validation)
+    - [Bugs and Fixes](#bugs-and-fixes)
+  - [Deployment](#deployment)
+    - [Google Sheets API](#google-sheets-api)
+    - [Heroku Deployment](#heroku-deployment)
+  - [Credits](#credits)
 
 ---
 
@@ -225,11 +230,11 @@ Google Sheets automatically saves changes and maintains version history, providi
   - Python packages used:
     - gspread - used for working with Google Sheets. It provides a convenient API for accessing and manipulating spreadsheet data, such as reading, writing, and formatting cells, creating and deleting sheets, and managing permissions.
     - datetime - used to create, manipulate, and format date and time.
-    - tabulate - useed to convert data into nicely formatted tables.
+    - tabulate - used to convert data into nicely formatted tables.
     - pyfiglet - used to create ASCII art from the text.
-    - google.auth - used to provides authentication-related functionality for Google APIs.
+    - google.auth - used to provide authentication-related functionality for Google APIs.
     - os - used to provide functions for interacting with the operating system.
-    - re - used to for data validation.
+    - re - used for data validation.
 
 ---
 
@@ -308,6 +313,149 @@ The above test cases cover the major functionalities of the TYMS code. Performin
 
 ### Pep8 Validation
 
-All python code was run through [PEP8 Python Validator](https://pep8ci.herokuapp.com/)  validator and any warnings or errors were fixed. Code then validated successfully.
+All Python code was run through [PEP8 Python Validator](https://pep8ci.herokuapp.com/) without any warnings or errors.
 
 ![pep8](docs/testing/pep8_validator.png)
+
+---
+
+### Bugs and Fixes
+
+Bugs were found during the testing phase and were fixed. Validation was performed after each fix to ensure that the code was working as expected.
+  Bugs and fixes are listed below:
+
+- Bug: Validation of user input for the movement, truck, trailer, time, and seal number was not working correctly.
+- Fix: The validation was updated to check for the correct number of characters and to ensure that the input was up to 10 characters.
+- Bug: when the operation is done, the user is not asked to continue or leave the operation.
+- Fix: The confirmation was updated to check for the correct input and to ensure that the input was either "y" or "n".
+
+---
+
+## Deployment
+
+A site was created using the Visual Studio Code editor and pushed to GitHub to the remote repository using integrated Git functionality in Visual Studio Code.
+
+### Google Sheets API
+
+The Google Sheets API was used to store the data. The following steps were taken to set up the API:
+
+- Go to the [Google Cloud Platform UI](https://console.cloud.google.com/)
+
+- Create a new project
+
+![create pr](docs/screenshots/new_project.png)
+
+![cr pr](docs/screenshots/create_pr.png)
+
+- Select the project
+
+![select pr](docs/screenshots/select_pr.png)
+
+- Select API & Services
+
+![select](docs/screenshots/select_api.png)
+
+- Enable the Google Sheets API
+
+- Enable the Google Drive API
+
+![drive api](docs/screenshots/enable_drive.png)
+
+![g api](docs/screenshots/select_api.png)
+
+- Select the Google Sheets API
+
+![g api](docs/screenshots/search_sheet.png)
+
+- Select Enable
+
+![enable](docs/screenshots/enable_sheet.png)
+
+- Select Create Credentials
+
+![credentials](docs/screenshots/create_cred.png)
+
+- Select application data
+
+![api](docs/screenshots/create_cred_2.png)
+
+![service account](docs/screenshots/create_cred_3.png)
+
+- Select Editor
+
+![Alt text]Click on the email address
+
+![api keys](docs/screenshots/create_cred_5.png)
+
+- Click on Create New Key
+
+![new key](docs/screenshots/create_cred_6.png)
+
+- Select JSON
+
+![json](docs/screenshots/create_cred_7.png)
+
+- The key will be downloaded to your computer
+- Rename the key to "creds.json" and place it in the root directory of the project
+- The key will be used to authenticate the application to access the Google Sheets API
+- The key should not be shared with anyone
+
+- Go to the Google Sheet that you want to use
+- Click on Share
+
+![share](docs/screenshots/share.png)
+
+- Copy your client email address and add it to your Sheet
+
+![client email](docs/screenshots/create_cred_8.png)
+
+![paste](docs/screenshots/paste.png)
+
+---
+
+### Heroku Deployment
+
+The below steps were followed to deploy this project to Heroku:
+
+- Go to Heroku and click "New" to create a new app.
+- Choose an app name and region, and click "Create app".
+
+[Heroku new](docs/screenshots/new.png)
+
+- Go to "Settings" and navigate to Config Vars. Add the following config variables:
+  - PORT: 8000
+  - CRED: your creds file information
+
+![create app](docs/screenshots/settings.png)
+
+- Navigate to Buildpacks and add build packs for Python and NodeJS (in that order).
+
+![select built pack](docs/screenshots/add_p_j.png)
+
+- Navigate to "Deploy". Set the deployment method to Github and enter the repository name and connect.
+
+![deploy](docs/screenshots/deploy.png)
+
+- Scroll down to Manual Deploy, select "main" branch and click "Deploy Branch".
+
+![deploy](docs/screenshots/deploy_2.png)
+
+- The app will now be deployed to Heroku
+
+---
+
+## Credits
+
+[Gareth McGirr](https://github.com/Gareth-McGirr/motorcycle-rental-management)
+
+Inspiration and guidance on how to write markdown files.
+
+[Python Central](https://www.pythoncentral.io/tips-for-creating-a-google-sheet-database-with-python/)
+
+[Stack Overflow](https://stackoverflow.com/questions/67517096/python-google-sheets-api-search-for-a-specific-row-by-the-values-of-two-cell)
+
+[James Phoenix](https://understandingdata.com/posts/the-comprehensive-guide-to-google-sheets-with-python/)
+
+[WC3 Schools](https://www.w3schools.com/python/)
+
+Inspiration on how to create an effective database using Google Sheets API.
