@@ -262,8 +262,7 @@ def find_and_replace_value_in_sheet():
                 selected_duplicate_index = int(selected_duplicate_index)
                 selected_duplicate = duplicates[selected_duplicate_index-1]
             except (ValueError, IndexError):
-                print('Invalid input. Please select a valid \
-                    row index or type "quit".\n')
+                print('Invalid input. Please select a valid row or type "quit".\n')
         return selected_duplicate
 
     def get_duplicate_rows(rows, cell, search_value):

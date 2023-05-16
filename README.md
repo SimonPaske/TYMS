@@ -84,17 +84,15 @@ IMPLEMENTATION
       3. Trailer - This option lets the user enter up to 10 characters in the string.
       4. Arrival time - This option asks the user to enter time in HH:MM format.
       5. Seal - This option lets the user enter up to 10 digits.
-  - The user must input a correct value corresponding to the table or they will be alerted of an incorrect choice and the table will be presented again.
-  - This feature will allow the user to easily perform the operations needed
+  - The user must input a correct value corresponding to the table or they will be alerted of an incorrect choice.
+  - This feature will allow the user to easily perform the operations needed.
+  - Users can type "quit" while entering new information to back to the main menu.
 
-
-Sub-menu Options for "Delete Information from TYMS":
-
-Delete Truck Arrival
-Delete Truck Departure
-Delete Trailer Arrival
-Delete Trailer Departure
-Back to Main Menu
+- Option for "Delete Information from TYMS":
+  - When the user selects Delete Information from TYMS, the table will be printed with the row numbers and the user will be prompted to enter the corresponding row number to delete it.
+  - When the user enters the row number they will be asked to confirm their choice by pressing the "Enter" button on a keyboard or typing "cancel" to cancel the operation and back to the main menu.
+  - If a user press the "Enter" the program deletes the selected row and asks the user to continue or leave the operation by typing "y" or "n" respectively.
+  - Back to Main Menu - When the user type "quit" instead of row number, the program goes back to the main menu.
 
 ### Logical Flow
 
