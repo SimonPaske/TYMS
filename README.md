@@ -96,8 +96,8 @@ IMPLEMENTATION
 - Sub-menu options for "View TYMS Information":
   - When a user selects "View TYMS Information" from the main menu, the following options will appear:
     1. View All Information - This option will print all information in the table.
-    2. View Latest Three Arrivals - This option will print the latest 3 arrivals.
-    3. View Earliest Three Arrivals - This option will print the earliest 3 arrivals.
+    2. View Latest 3 Arrivals - This option will print the latest 3 arrivals.
+    3. View Earliest 3 Arrivals - This option will print the earliest 3 arrivals.
     4. Back to Main Menu - This option will bring the user to the main menu.
   - The user must input a correct number corresponding to each menu or they will be alerted of an incorrect choice and the menu will be presented again.
   - This feature will allow the user to easily access the sub-menus to each category to perform the operations needed.
@@ -176,7 +176,7 @@ IMPLEMENTATION
 
 - Option for "Delete Information from TYMS":
   - When the user selects Delete Information from TYMS, the table will be printed with the row numbers and the user will be prompted to enter the corresponding row number to delete it.
-  - When the user enters the row number they will be asked to confirm their choice by pressing the "Enter" button on a keyboard or typing "cancel" to cancel the operation and back to the main menu.
+  - When the users enter the row number they will be asked to confirm their choice by pressing the "Enter" button on a keyboard or typing "cancel" to cancel the operation and back to the main menu.
   - If a user press the "Enter" the program deletes the selected row and asks the user to continue or leave the operation by typing "y" or "n" respectively.
   - Back to Main Menu - When the user type "quit" instead of row number, the program goes back to the main menu.
 
@@ -379,15 +379,15 @@ The Google Sheets API was used to store the data. The following steps were taken
 
 ![api](docs/screenshots/create_cred_2.png)
 
-![service account](docs/screenshots/create_cred_3.png)
-
 - Select Editor
 
-![Alt text]Click on the email address
+![editor](docs/screenshots/create_cred_4.png)
+
+- Click on the email address
 
 ![api keys](docs/screenshots/create_cred_5.png)
 
-- Click on Create New Key
+- Click on Keys at the top menu and then Create New Key
 
 ![new key](docs/screenshots/create_cred_6.png)
 
@@ -420,13 +420,13 @@ The below steps were followed to deploy this project to Heroku:
 - Go to Heroku and click "New" to create a new app.
 - Choose an app name and region, and click "Create app".
 
-[Heroku new](docs/screenshots/new.png)
+![new](docs/screenshots/new.png)
 
 - Go to "Settings" and navigate to Config Vars. Add the following config variables:
   - PORT: 8000
-  - CRED: your creds file information
+  - CREDS: your creds file information
 
-![create app](docs/screenshots/settings.png)
+![settings](docs/screenshots/settings.png)
 
 - Navigate to Buildpacks and add build packs for Python and NodeJS (in that order).
 
